@@ -14,15 +14,17 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 export interface AuthResponse {
   token: string
   refreshToken: string
+  playerId?: string
+  nickname?: string
   emailVerified: boolean
   verificationToken?: string
 }
 
 export const authApi = {
-  register: (email: string, password: string) =>
+  register: (email: string, password: string, nickname?: string) =>
     request<AuthResponse>('/v1/auth/register', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, ...(nickname ? { nickname } : {}) }),
     }),
 
   login: (email: string, password: string) =>
