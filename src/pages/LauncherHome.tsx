@@ -316,9 +316,17 @@ function GamePanel({ status, progress, speed, onDownload, onUpdate, onCancel, is
 function AccountPanel({ isLoggedIn, onAuthClick, onLogout }: {
   isLoggedIn: boolean; onAuthClick: () => void; onLogout: () => void
 }) {
-  const nickname  = localStorage.getItem('auth_nickname') ?? ''
-  const email     = localStorage.getItem('auth_email')   ?? ''
-  const playerId  = localStorage.getItem('auth_player_id') ?? ''
+  // Recarrega a cada segundo enquanto o painel está aberto para pegar
+  // o nickname assim que a restoreSession() preencher o localStorage
+  const [, tick] = useState(0)
+  useEffect(() => {
+    const id = setInterval(() => tick(v => v + 1), 800)
+    return () => clearInterval(id)
+  }, [])
+
+  const nickname    = localStorage.getItem('auth_nickname')   ?? ''
+  const email       = localStorage.getItem('auth_email')      ?? ''
+  const playerId    = localStorage.getItem('auth_player_id')  ?? ''
   const displayName = nickname || email || 'Jogador'
   if (!isLoggedIn) {
     return (
