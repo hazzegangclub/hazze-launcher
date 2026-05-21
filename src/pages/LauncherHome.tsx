@@ -316,7 +316,10 @@ function GamePanel({ status, progress, speed, onDownload, onUpdate, onCancel, is
 function AccountPanel({ isLoggedIn, onAuthClick, onLogout }: {
   isLoggedIn: boolean; onAuthClick: () => void; onLogout: () => void
 }) {
-  const email = localStorage.getItem('auth_email') ?? ''
+  const nickname  = localStorage.getItem('auth_nickname') ?? ''
+  const email     = localStorage.getItem('auth_email')   ?? ''
+  const playerId  = localStorage.getItem('auth_player_id') ?? ''
+  const displayName = nickname || email || 'Jogador'
   if (!isLoggedIn) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4 p-6 text-center">
@@ -342,7 +345,12 @@ function AccountPanel({ isLoggedIn, onAuthClick, onLogout }: {
           <User className="w-5 h-5 text-hazze-pink" />
         </div>
         <div>
-          <p className="font-semibold text-white text-sm">{email || 'Jogador'}</p>
+          <p className="font-semibold text-white text-sm">{displayName}</p>
+          {playerId && (
+            <p className="text-[10px] text-gray-600 font-mono truncate mt-0.5" title={playerId}>
+              ID: {playerId.slice(0, 8)}…
+            </p>
+          )}
           <p className="text-xs text-green-400 flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />Online
           </p>
