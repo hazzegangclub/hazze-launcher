@@ -6,7 +6,7 @@ interface Props { onClose: () => void }
 type Mode = 'register' | 'login'
 
 export default function AuthModal({ onClose }: Props) {
-  const [mode, setMode]         = useState<Mode>('register')
+  const [mode, setMode]         = useState<Mode>('login')
   const [email, setEmail]       = useState('')
   const [nickname, setNickname] = useState('')
   const [password, setPassword] = useState('')
@@ -108,7 +108,7 @@ export default function AuthModal({ onClose }: Props) {
     <Overlay onClose={onClose}>
       {/* Tabs */}
       <div className="flex mb-5 border-b border-hazze-border">
-        {(['register', 'login'] as Mode[]).map((m) => (
+        {(['login', 'register'] as Mode[]).map((m) => (
           <button key={m}
             onClick={() => { setMode(m); setError('') }}
             className={`px-5 py-2.5 text-sm font-semibold transition border-b-2 -mb-px ${
