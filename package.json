@@ -1,0 +1,72 @@
+{
+  "name": "@hazze/launcher",
+  "private": true,
+  "version": "1.0.0",
+  "main": "dist-electron/main.cjs",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node scripts/start.cjs",
+    "dev": "concurrently -k \"vite --port 5174\" \"npm run build:main -- --watch\" \"wait-on http://localhost:5174 && electron .\"",
+    "build": "tsc && vite build",
+    "build:main": "esbuild electron/main.cjs --bundle --platform=node --external:electron --external:path --outfile=dist-electron/main.cjs",
+    "electron:pack": "npm run build && npm run build:main && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --dir",
+    "electron:dist": "npm run build && npm run build:main && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder",
+    "preview": "vite preview --port 5174"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9",
+    "lucide-react": "^0.441.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3",
+    "esbuild": "^0.23.0",
+    "postcss": "^8.4.45",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.hazze.launcher",
+    "productName": "Hazze Gang Club Launcher",
+    "publish": {
+      "provider": "github",
+      "owner": "HazzeGangClub",
+      "repo": "hazze-launcher",
+      "releaseType": "release"
+    },
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**",
+      "dist-electron/**",
+      "electron/preload.cjs"
+    ],
+    "win": {
+      "target": [
+        { "target": "nsis" },
+        { "target": "dir" }
+      ],
+      "sign": null,
+      "forceCodeSigning": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Hazze Gang Club Launcher"
+    }
+  }
+}
